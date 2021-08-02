@@ -1,0 +1,37 @@
+import unittest
+
+from main import gender_df
+from main import age_df
+from main import class_df
+from main import df
+
+
+class TestTitanic(unittest.TestCase):
+    def test_name(self):
+        assert age_df is not None
+        assert gender_df is not None
+        assert class_df is not None
+
+    def test_class(self):
+        cabin = 'C23'
+        exp = cabin.startswith('C')
+        self.assertEqual(exp, True)
+
+    def test_gender(self):
+        if gender_df == 'Female' or gender_df == 'Male':
+            self.assertEqual(gender_df, True)
+        else:
+            return False
+
+    def test_age(self):
+        if (df.Age < 0).any():
+            with self.assertRaises(ValueError):
+                ()
+        else:
+            return True
+
+        self.assertEqual(df.age_df(45), 'Adult')
+
+
+if __name__ == "__main__":
+    unittest.main()
