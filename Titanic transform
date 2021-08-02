@@ -1,0 +1,54 @@
+# importing pandas library
+import pandas as pd
+# reading given excel file in dataframe
+df = pd.read_excel(r'D:\Users\hkadus\Downloads\titanic-transform.xlsx',sheet_name='titanic-transform')
+
+# Splitting first,last name and also called as
+df[['Last name', 'First name']] = df['Name'].str.split(',', expand=True)    # splitting at ','
+df[['Also called as']] = df['Name'].str.extract('.*\((.*)\).*')             # extracting from parentheses
+
+# Gender column by salutation
+df['Gender'] = df['Name'].str.split().str[1]                # Salutation at second place, getting them without splitting
+
+
+def gender_df(df):
+    if (df['Gender'] == 'Mr.') or (df['Gender'] == 'Master.'):      # Checking salutation for male or female
+        return 'Male'
+    elif (df['Gender'] == 'Miss.') or (df['Gender'] == 'Mrs.'):
+        return 'Female'
+
+
+df['Gender'] = df.apply(gender_df, axis=1)                           # Getting output using function
+
+# Age group column
+
+
+def age_df(df):
+    if (df['Age'] >= 0) and (df['Age'] < 18):                       # Checking given age category
+        return 'Kid'
+    elif (df['Age'] >= 18) and (df['Age'] < 60):
+        return 'Adult'
+    elif df['Age'] >= 60:
+        return 'Elder'
+
+
+df['Age group'] = df.apply(age_df, axis=1)
+
+# Cabin is first or second class
+df['Cabin'] = df['Cabin'].apply(str)            # converting datatype float to string
+
+
+def class_df(df):
+
+    if df['Cabin'].startswith('C'):             # check cabin number starts with 'C' or not
+        return 'first class'
+    else:
+        return 'second class'
+
+
+df['Class'] = df.apply(class_df, axis=1)        # Getting output using function
+
+# Main method
+if __name__ == "__main__":
+
+    df.to_csv('TitanicOutput.csv')              # writing output in csv file
